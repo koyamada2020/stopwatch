@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <!-- FontAwesome -->
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+    <!-- my css -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <!-- js読み込み -->
+    <script type="text/javascript" src="stopwatch.js"></script>
+    <title>ストップウォッチ</title>
+</head>
+<body class="container">
+    <header>ストップウォッチ</header>
+    <div class="content">
+        <!-- タイマー表示部 -->
+        <div class="display-1">
+            <p id="timerText">00:00.00</p>
+        </div>
+        <!-- ボタン群 -->
+        <ul class="list-inline">
+            <li id="reset" class="far fa-times-circle fa-5x list-inline-item"></li>
+            <li id="start" class="far fa-play-circle fa-5x list-inline-item"></li>
+            <li id="pause" class="far fa-pause-circle fa-5x list-inline-item" style="display:none;"></li>
+            <li id="lap" class="far fa-flag fa-5x"></li>     
+        </ul>
+        <!-- ラップタイムログ -->
+        <ul id="laptimeLog">
+            <!-- <li id="lapTime" class="far fa-play-circle fa-5x list-inline-item"></li> -->
+            <!-- <li id="totalTime" class="far fa-times-circle fa-5x list-inline-item"></li> -->
+        </ul>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <!---->
+</body>
+</html>

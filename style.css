@@ -1,0 +1,52 @@
+header {
+    text-align: center;
+}
+
+.content {
+    margin-top: 50px;
+}
+
+.table-block {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.table-block table tr th {
+    font-size: 40px;
+}
+
+#timerText {
+    text-align: center;
+}
+
+#laptimeLog {
+    text-align: center;
+    list-style: none;
+}
+
+#laptimeLog li li {
+    display: inline-block;
+    margin-right: 40px;
+    font-weight: bold;
+}
+
+/* bootstrap */
+.list-inline {
+    text-align: center;
+}
+
+.list-inline li {
+    margin: 30px;
+}
+
+.table-block table {
+    margin: 0 auto;
+    width: 50%;
+}
+
+/* スマホ用の表示 */
+@media only screen and (max-width : 736px){
+    .table-block table {
+        width: 100%;
+    }
+}
