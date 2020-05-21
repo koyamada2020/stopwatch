@@ -50,8 +50,6 @@ function startTimer() {
             timerText = m + ':' + s + '.' + milli;
             // 画面に表示する時間を代入
             timerTextEl.textContent = timerText;
-
-            console.log('minutes=',m,'seconds=',s,'milli=',milli,'total=',sec);
         }, 10);
     }
 }
@@ -100,21 +98,27 @@ function addLaptime() {
         // ラップタイムの文字型
         const lapTimeText = m + ':' + s + '.' + milli;
 
-        //
+        // 要素を生成
         const parentLi = document.createElement('li');
-        //
         const childLi = document.createElement('li');
-        //
         const childLi2 = document.createElement('li');
-        //
+        // 表示する文字列を代入
         childLi.textContent = '#' + lapNumber + ' ' + lapTimeText;
-        //
         childLi2.textContent = timerText;
-        //
+        // 親要素に子要素を加える
         parentLi.appendChild(childLi);
         parentLi.appendChild(childLi2);
+        
+        const ulEl = document.getElementById('laptimeLog');
 
-        document.getElementById('laptimeLog').appendChild(parentLi);
+        // ulElの子要素が0個以下の場合
+        if (ulEl.children.length <= 0) {
+            // 末尾に挿入
+            ulEl.appendChild(parentLi);
+        } else {
+            // 最初の子要素の前に挿入
+            ulEl.insertBefore(parentLi, ulEl.children[0]);
+        }
 
         lapNumber++;
     }
@@ -141,7 +145,7 @@ function reset() {
     while (ulEl.firstChild) {
         ulEl.removeChild(ulEl.firstChild);
     }
-    
+
     // ポーズボタンを非表示
     const pauseEl = document.getElementById('pause');
     pauseEl.style.display = 'none';
