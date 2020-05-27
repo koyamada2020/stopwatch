@@ -30,6 +30,11 @@ header {
     font-weight: bold;
 }
 
+/* google fonts */
+#timerText {
+    font-family: 'Lato', sans-serif;
+}
+
 /* bootstrap */
 .list-inline {
     text-align: center;
