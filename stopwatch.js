@@ -1,16 +1,17 @@
-// 継続時間
-let sec = 0;
-// 経過時間の文字列型
-let timerText = '00:00.00'
 // ストップウォッチのON/OFFフラグ
 let startFlag = false;
-// intervalのid
-let timerId;
-//
+// ラップタイムのナンバー
 let lapNumber = 1;
-//
+// 合計ラップタイム
 let totalLapTime = 0;
+// requestAnimationFlameID
+let requestId = null;
+// 時間を一時的に格納する変数
+let tempTime = 0;
+// 一時停止するまでの累計時間
+let beforeTime = 0;
 
+// タイマーをスタートする
 function startTimer() {
     if (!startFlag) {
         startFlag = true;
@@ -23,43 +24,50 @@ function startTimer() {
         pauseEl.removeAttribute('style');
 
         // 時間を表示する要素を取得
-        const timerTextEl = document.getElementById('timerText');
+        const mEl = document.getElementById('m');
+        const sEl = document.getElementById('s');
+        const msEl = document.getElementById('ms');
 
-        // 0.01秒ごとに画面に表示
-        timerId = setInterval(() => {
-            sec++;
-            // 秒数を60*100で割って分を求める
-            let m = Math.floor(sec / (60 * 100));
-            // 秒数を60*100で割って余りを出して、更に100で割って秒を求める。
-            let s = Math.floor((sec % (60 * 100)) / 100);
-            // 秒数を1*100で割って余りをだしてミリ秒を求める
-            let milli = sec % (1 * 100);
+        const startTime = new Date().getTime(); // 描画開始時刻を取得
 
-            // 値が1ケタの場合2ケタに0埋め
-            if (m < 10) {
-                m = '0' + m;
-            }
-            if (s < 10) {
-                s = '0' + s;
-            }
-            if (milli < 10) {
-                milli = '0' + milli;
+        // タイムを測る関数
+        const loop = () => {
+            requestId = window.requestAnimationFrame(loop);
+            let currentTime = new Date().getTime(); // 経過時刻を取得
+            let status = currentTime - startTime + beforeTime// 経過時刻 - 描画開始時刻 + 前回までの累計時刻
+            tempTime = status;
+            
+            let m = parseInt(status / (60 * 1000));
+            let s = parseInt((status % (60 * 1000)) / 1000);
+            let ms = parseInt(status % 1000);
+
+            // 足りない桁数を0で埋める
+            if (m < 10) m = '0' + m;
+            if (s < 10) s = '0' + s;
+            if (ms < 10) {
+                ms = '00' + ms;
+            } else if (ms < 100) {
+                ms = '0' + ms;
             }
 
-            // 計測時間
-            timerText = m + ':' + s + '.' + milli;
-            // 画面に表示する時間を代入
-            timerTextEl.textContent = timerText;
-        }, 10);
+            // 表示させる秒数を代入
+            mEl.textContent = m;
+            sEl.textContent = s;
+            msEl.textContent = ms;
+        }
+        loop();
     }
 }
 
+// タイマーを一時停止する
 function pauseTimer() {
     if (startFlag) {
         startFlag = false;
 
-        // タイマーを停止
-        clearInterval(timerId);
+        // タイマー描画を停止
+        cancelAnimationFrame(requestId);
+        // 一時停止した時間を代入
+        beforeTime = tempTime;
 
         // ポーズボタンを非表示
         const pauseEl = document.getElementById('pause');
@@ -70,33 +78,29 @@ function pauseTimer() {
     }
 }
 
+// ラップタイムを追加する
 function addLaptime() {
     if (startFlag && lapNumber < 100) {
-        // 今までの経過時間＋ラップタイムの合計＝ラップタイム
-        const lapTime = sec - totalLapTime;
+        // ラップタイム　＝　経過時間　－　トータルラップタイム
+        const lapTime = tempTime - totalLapTime;
         // ラップタイムを合計タップタイムに加算していく
         totalLapTime += lapTime;
 
-        // 秒数を60*100で割って分を求める
-        let m = Math.floor(lapTime / (60 * 100));
-        // 秒数を60*100で割って余りを出して、更に100で割って秒を求める。
-        let s = Math.floor((lapTime % (60 * 100)) / 100);
-        // 秒数を1*100で割って余りをだしてミリ秒を求める
-        let milli = lapTime % (1 * 100);
+        let m = parseInt(lapTime / (60 * 1000));
+        let s = parseInt((lapTime % (60 * 1000)) / 1000);
+        let ms = parseInt(lapTime % 1000);
 
-        // 値が1ケタの場合2ケタに0埋め
-        if (m < 10) {
-            m = '0' + m;
-        }
-        if (s < 10) {
-            s = '0' + s;
-        }
-        if (milli < 10) {
-            milli = '0' + milli;
+        // 足りない桁数を0で埋める
+        if (m < 10) m = '0' + m;
+        if (s < 10) s = '0' + s;
+        if (ms < 10) {
+            ms = '00' + ms;
+        } else if (ms < 100) {
+            ms = '0' + ms;
         }
 
-        // ラップタイムの文字型
-        const lapTimeText = m + ':' + s + '.' + milli;
+        // ラップタイムのテキスト
+        const lapTimeText = m + ':' + s + '.' + ms;
 
         // 要素を生成
         const parentLi = document.createElement('li');
@@ -104,7 +108,7 @@ function addLaptime() {
         const childLi2 = document.createElement('li');
         // 表示する文字列を代入
         childLi.textContent = '#' + lapNumber + ' ' + lapTimeText;
-        childLi2.textContent = timerText;
+        childLi2.textContent = document.getElementById('timerText').textContent;
         // 親要素に子要素を加える
         parentLi.appendChild(childLi);
         parentLi.appendChild(childLi2);
@@ -124,21 +128,26 @@ function addLaptime() {
     }
 }
 
+// タイマー及びラップタイムログをリセットする
 function reset() {
-
     // 初期化
     startFlag = false;
-    sec = 0;
-    timerText = '00:00.00'
+    beforeTime = 0;
     lapNumber = 1;
     totalLapTime = 0;
-    //
 
     // タイマー停止
-    clearInterval(timerId);
+    cancelAnimationFrame(requestId);
+
+    // 時間を表示する要素を取得
+    const mEl = document.getElementById('m');
+    const sEl = document.getElementById('s');
+    const msEl = document.getElementById('ms');
 
     // 時間の表示を初期化
-    const timerTextEl = document.getElementById('timerText').textContent = timerText;
+    mEl.textContent = '00';
+    sEl.textContent = '00';
+    msEl.textContent = '000';
 
     // ラップタイムのログをすべて削除
     const ulEl = document.getElementById('laptimeLog');
@@ -154,6 +163,7 @@ function reset() {
     startEl.removeAttribute('style');   
 }
 
+// 初期化
 function init() {
     // イベントリスナーの登録
     document.getElementById('start').addEventListener('click', startTimer, false);
@@ -161,4 +171,6 @@ function init() {
     document.getElementById('lap').addEventListener('click', addLaptime, false);
     document.getElementById('reset').addEventListener('click', reset, false);
 }
+
+// html読み込み時に呼び出される
 window.onload = init;
