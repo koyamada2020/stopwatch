@@ -34,7 +34,7 @@ function startTimer() {
         const loop = () => {
             requestId = window.requestAnimationFrame(loop);
             let currentTime = new Date().getTime(); // 経過時刻を取得
-            let status = currentTime - startTime + beforeTime// 経過時刻 - 描画開始時刻 + 前回までの累計時刻
+            let status = currentTime - startTime + beforeTime; // 経過時刻 - 描画開始時刻 + 前回までの累計時刻
             tempTime = status;
             
             let m = parseInt(status / (60 * 1000));
@@ -49,6 +49,8 @@ function startTimer() {
             } else if (ms < 100) {
                 ms = '0' + ms;
             }
+            // ミリセカンドを2ケタ表示するため末尾を削除
+            ms = String(ms).slice(0, -1);
 
             // 表示させる秒数を代入
             mEl.textContent = m;
@@ -147,7 +149,7 @@ function reset() {
     // 時間の表示を初期化
     mEl.textContent = '00';
     sEl.textContent = '00';
-    msEl.textContent = '000';
+    msEl.textContent = '00';
 
     // ラップタイムのログをすべて削除
     const ulEl = document.getElementById('laptimeLog');
